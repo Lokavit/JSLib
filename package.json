@@ -1,0 +1,13 @@
+{
+  "name": "lib",
+  "version": "1.0.0",
+  "description": "JavaScript lib",
+  "main": "index.js",
+  "scripts": {
+    "dev": "python -m http.server 1413",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Lokavit",
+  "license": "ISC"
+}
