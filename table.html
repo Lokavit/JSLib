@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table id="dataTable" border="1">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+      //       const data = [
+      //     {“MAIETYPE”:“TYPE1”,“Column9”:“TYPE2”},
+      //     {“MAIETYPE”:“TYPE1 报价”,“Column9”:“TYPE2 报价”,“板材”:“FRONT”,“Column13”:“REAR”},
+      //     {“固定价格”:“Pin数”,“MAIETYPE”:“PIN数”,“Column9”:“Pin数”,“模块类型”:“MODULE TYPE1”,“Column15”:“MODULE TYPE2”},
+      //     {“固定价格”:“1–4”,“Column3”:“4–5”,“Column4”:“6UP”,“MAIETYPE”:“1–4”,“Column7”:“4–5”,“Column8”:“6UP”,“Column9”:“1–4”,“Column10”:“4–5”,“Column11”:“6UP”},
+      //     {“No.”:1,“固定价格”:852,“Column3”:357,“Column4”:159,“防水”:789,“MAIETYPE”:9123,“Column7”:4456,“Column8”:1452,“Column9”:1342,“Column10”:1578,“Column11”:1320,“板材”:147,“Column13”:258,“模块类型”:369,“Column15”:963}
+      //   ];
+
+      const data = [
+        { MAIETYPE: "TYPE1", Column9: "TYPE2" },
+        {
+          MAIETYPE: "TYPE1 报价",
+          Column9: "TYPE2 报价",
+          板材: "FRONT",
+          Column13: "REAR",
+        },
+        {
+          固定价格: "Pin数",
+          MAIETYPE: "PIN数",
+          Column9: "Pin数",
+          模块类型: "MODULE TYPE1",
+          Column15: "MODULE TYPE2",
+        },
+        {
+          固定价格: "1--4",
+          Column3: "4--5",
+          Column4: "6UP",
+          MAIETYPE: "1--4",
+          Column7: "4--5",
+          Column8: "6UP",
+          Column9: "1--4",
+          Column10: "4--5",
+          Column11: "6UP",
+        },
+        {
+          "No.": 1,
+          固定价格: 852,
+          Column3: 357,
+          Column4: 159,
+          防水: 789,
+          MAIETYPE: 9123,
+          Column7: 4456,
+          Column8: 1452,
+          Column9: 1342,
+          Column10: 1578,
+          Column11: 1320,
+          板材: 147,
+          Column13: 258,
+          模块类型: 369,
+          Column15: 963,
+        },
+      ];
+
+      function createTable(data) {
+        const table = document.getElementById("dataTable");
+        const thead = table.querySelector("thead");
+        const tbody = table.querySelector("tbody");
+
+        // Create table header
+        const headerRow = document.createElement("tr");
+        const allKeys = Array.from(new Set(data.flatMap(Object.keys)));
+
+        allKeys.forEach((key) => {
+          const th = document.createElement("th");
+          th.innerText = key;
+          headerRow.appendChild(th);
+        });
+
+        thead.appendChild(headerRow);
+
+        // Create table body
+        data.forEach((item) => {
+          const row = document.createElement("tr");
+
+          allKeys.forEach((key) => {
+            const td = document.createElement("td");
+            td.innerText = item[key] || "";
+            row.appendChild(td);
+          });
+
+          tbody.appendChild(row);
+        });
+      }
+
+      createTable(data);
+    </script>
+    <!-- <script src="“script.js”"></script> -->
+  </body>
+</html>

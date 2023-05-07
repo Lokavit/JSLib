@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Preview Component</title>
+    <style>
+      .component {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        font-family: Arial, sans-serif;
+      }
+      .image-preview {
+        border: 1px solid #ddd;
+        width: 300px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0;
+        font-size: 14px;
+        color: #666;
+      }
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+      .nav-buttons {
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="component">
+      <input type="file" id="fileInput" multiple />
+      <div class="image-preview" id="imagePreview">No image to preview</div>
+      <div class="nav-buttons">
+        <button id="prevButton" disabled>Prev</button>
+        <button id="nextButton" disabled>Next</button>
+      </div>
+    </div>
+    <!-- <script src="script.js"></script> -->
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const prevButton = document.getElementById("prevButton");
+      const nextButton = document.getElementById("nextButton");
+      const imagePreview = document.getElementById("imagePreview");
+
+      let images = [];
+      let currentImageIndex = -1;
+
+      fileInput.addEventListener("change", handleFileUpload);
+      prevButton.addEventListener("click", showPrevImage);
+      nextButton.addEventListener("click", showNextImage);
+
+      function handleFileUpload() {
+        images = Array.from(fileInput.files).filter((file) =>
+          file.type.startsWith("image/")
+        );
+        currentImageIndex = -1;
+
+        if (images.length > 0) {
+          currentImageIndex = 0;
+          showImage();
+          updateNavigationButtons();
+        } else {
+          imagePreview.innerHTML = "No image to preview";
+          prevButton.disabled = true;
+          nextButton.disabled = true;
+        }
+      }
+
+      function showImage() {
+        if (currentImageIndex >= 0 && currentImageIndex < images.length) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview"/>`;
+          };
+          reader.readAsDataURL(images[currentImageIndex]);
+        } else {
+          imagePreview.innerHTML = "No image to preview";
+        }
+      }
+
+      function showPrevImage() {
+        if (currentImageIndex > 0) {
+          currentImageIndex--;
+          showImage();
+          updateNavigationButtons();
+        }
+      }
+
+      function showNextImage() {
+        if (currentImageIndex < images.length - 1) {
+          currentImageIndex++;
+          showImage();
+          updateNavigationButtons();
+        }
+      }
+
+      function updateNavigationButtons() {
+        prevButton.disabled = currentImageIndex === 0;
+        nextButton.disabled = currentImageIndex === images.length - 1;
+      }
+    </script>
+  </body>
+</html>

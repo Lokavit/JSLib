@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .form {
+        background-color: aquamarine;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        max-width: 45rem;
+      }
+      .form div {
+        background-color: antiquewhite;
+        padding: 0.3rem 3rem;
+      }
+      .form div label {
+        display: inline-block;
+        min-width: 5rem;
+        text-align: right;
+        padding-right: 1rem;
+      }
+      /* .form div input {
+        display: inline-block;
+        max-width: 9rem;
+      } */
+      .form div select,
+      .form div input {
+        display: inline-block;
+        min-width: 9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <div class="form" style="display: flex;">
+      <div><label for="pin1">text Value:</label><input type="text" name="pin1" id="pin1" value="" /></div>
+      <div><label for="test2">tex Value:</label><select name="test2" id="test2"><option value="d">DValue</option><option value="e">Eue</option><option value="f">Falu</option></select></div>
+      <div><label for="test4">tex lue</label><input type="checkbox" name="test4" id="test4" value="1" checked /></div>
+      <div><label for="pin4"> Vale:</label><input type="number" name="pin4" id="pin4" value="0" />
+      </div>
+    </div>   Because all the data is uncertain, turn this form into a dynamic creation using javascript code -->
+    <div id="form-container"></div>
+
+    <script>
+      // Configuration object
+      const config = [
+        { type: "text", id: "pin1", labelText: "Text Value:", value: "" },
+        {
+          type: "select",
+          id: "test2",
+          labelText: "Tex Value:",
+          options: [
+            { value: "d", text: "DValue" },
+            { value: "e", text: "Eue" },
+            { value: "f", text: "Falu" },
+          ],
+        },
+        {
+          type: "checkbox",
+          id: "test4",
+          labelText: "Tex lue:",
+          value: "1",
+          checked: true,
+        },
+        { type: "number", id: "pin4", labelText: "Vale:", value: "0" },
+      ];
+
+      document.addEventListener("DOMContentLoaded", function () {
+        createDynamicForm();
+      });
+
+      function createDynamicForm() {
+        const container = document.getElementById("form-container");
+
+        const form = document.createElement("form");
+        form.setAttribute("class", "form");
+        form.setAttribute("style", "display: flex; flex-direction: row;");
+
+        config.forEach((field) => {
+          let elementDiv;
+          switch (field.type) {
+            case "text":
+            case "number":
+              elementDiv = createInputDiv(
+                field.id,
+                field.type,
+                field.labelText,
+                field.value
+              );
+              break;
+            case "select":
+              elementDiv = createSelectDiv(
+                field.id,
+                field.labelText,
+                field.options
+              );
+              break;
+            case "checkbox":
+              elementDiv = createInputDiv(
+                field.id,
+                field.type,
+                field.labelText,
+                field.value,
+                field.checked
+              );
+              break;
+            default:
+              break;
+          }
+          form.appendChild(elementDiv);
+        });
+
+        container.appendChild(form);
+      }
+
+      function createInputDiv(id, type, labelText, value, checked) {
+        const div = document.createElement("div");
+
+        const inputLabel = document.createElement("label");
+        inputLabel.setAttribute("for", id);
+        inputLabel.innerText = labelText;
+        div.appendChild(inputLabel);
+
+        const input = document.createElement("input");
+        input.setAttribute("type", type);
+        input.setAttribute("name", id);
+        input.setAttribute("id", id);
+        input.setAttribute("value", value);
+        if (checked) {
+          input.setAttribute("checked", true);
+        }
+        div.appendChild(input);
+
+        return div;
+      }
+
+      function createSelectDiv(id, labelText, options) {
+        const div = document.createElement("div");
+
+        const selectLabel = document.createElement("label");
+        selectLabel.setAttribute("for", id);
+        selectLabel.innerText = labelText;
+        div.appendChild(selectLabel);
+
+        const select = document.createElement("select");
+        select.setAttribute("name", id);
+        select.setAttribute("id", id);
+
+        options.forEach((option) => {
+          const opt = document.createElement("option");
+          opt.setAttribute("value", option.value);
+          opt.innerText = option.text;
+          select.appendChild(opt);
+        });
+
+        div.appendChild(select);
+
+        return div;
+      }
+
+      /** 值被固定了  */
+      //   document.addEventListener("DOMContentLoaded", function () {
+      //     createDynamicForm();
+      //   });
+
+      //   function createDynamicForm() {
+      //     const container = document.getElementById("form-container");
+
+      //     const form = document.createElement("form");
+      //     form.setAttribute("class", "form");
+      //     // form.setAttribute("style", "display: flex;");
+
+      //     // Text input
+      //     const textDiv = createInputDiv(
+      //       "pin1",
+      //       "text",
+      //       "Text Value:",
+      //       "",
+      //       "text"
+      //     );
+      //     form.appendChild(textDiv);
+
+      //     // Select input
+      //     const selectDiv = createSelectDiv("test2", "Tex Value:", [
+      //       { value: "d", text: "DValue" },
+      //       { value: "e", text: "Eue" },
+      //       { value: "f", text: "Falu" },
+      //     ]);
+      //     form.appendChild(selectDiv);
+
+      //     // Checkbox input
+      //     const checkboxDiv = createInputDiv(
+      //       "test4",
+      //       "checkbox",
+      //       "Tex Lue:",
+      //       "1",
+      //       "tex lue"
+      //     );
+      //     form.appendChild(checkboxDiv);
+
+      //     // Number input
+      //     const numberDiv = createInputDiv(
+      //       "pin4",
+      //       "number",
+      //       "Vale:",
+      //       "0",
+      //       "text"
+      //     );
+      //     form.appendChild(numberDiv);
+
+      //     container.appendChild(form);
+      //   }
+
+      //   function createInputDiv(id, type, label, value, labelText) {
+      //     const div = document.createElement("div");
+
+      //     const inputLabel = document.createElement("label");
+      //     inputLabel.setAttribute("for", id);
+      //     inputLabel.innerText = labelText;
+      //     div.appendChild(inputLabel);
+
+      //     const input = document.createElement("input");
+      //     input.setAttribute("type", type);
+      //     input.setAttribute("name", id);
+      //     input.setAttribute("id", id);
+      //     input.setAttribute("value", value);
+      //     if (type === "checkbox") {
+      //       input.setAttribute("checked", true);
+      //     }
+      //     div.appendChild(input);
+
+      //     return div;
+      //   }
+
+      //   function createSelectDiv(id, labelText, options) {
+      //     const div = document.createElement("div");
+
+      //     const selectLabel = document.createElement("label");
+      //     selectLabel.setAttribute("for", id);
+      //     selectLabel.innerText = labelText;
+      //     div.appendChild(selectLabel);
+
+      //     const select = document.createElement("select");
+      //     select.setAttribute("name", id);
+      //     select.setAttribute("id", id);
+
+      //     options.forEach((option) => {
+      //       const opt = document.createElement("option");
+      //       opt.setAttribute("value", option.value);
+      //       opt.innerText = option.text;
+      //       select.appendChild(opt);
+      //     });
+
+      //     div.appendChild(select);
+
+      //     return div;
+      //   }
+    </script>
+  </body>
+</html>

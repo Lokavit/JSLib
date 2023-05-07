@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Form</title>
+    <style>
+      .inputContainer {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .removeButton {
+        background-color: red;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-left: 5px;
+        padding: 2px 5px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="form-container">
+      <form id="dynamic-form">
+        <div class="inputContainer" id="inputTemplate" style="display: none">
+          <input type="text" name="field" placeholder="Field name" />
+          <textarea name="value" placeholder="Field value"></textarea>
+          <button type="button" class="removeButton">X</button>
+        </div>
+      </form>
+      <button id="addButton">Add new field</button>
+      <button id="submitData">Submit data</button>
+    </div>
+    <!-- <script src="script.js"></script> -->
+    <script>
+      // 2. Crate a JavaScript file (script.js in this case) to handle adding new fields and submitting data from the form:
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const addButton = document.getElementById("addButton");
+        const submitButton = document.getElementById("submitData");
+
+        addButton.addEventListener("click", addNewField);
+        submitButton.addEventListener("click", submitData);
+      });
+
+      function addNewField() {
+        const form = document.getElementById("dynamic-form");
+        const template = document.getElementById("inputTemplate");
+        const newField = template.cloneNode(true);
+
+        newField.style.display = "flex";
+        newField
+          .querySelector(".removeButton")
+          .addEventListener("click", function () {
+            newField.remove();
+          });
+
+        form.appendChild(newField);
+      }
+
+      function submitData() {
+        const form = document.getElementById("dynamic-form");
+        const fields = form.querySelectorAll(
+          ".inputContainer:not(#inputTemplate)"
+        );
+        const data = {};
+
+        fields.forEach((field) => {
+          const fieldName = field.querySelector('input[name="field"]').value;
+          const fieldValue = field.querySelector(
+            'textarea[name="value"]'
+          ).value;
+          data[fieldName] = fieldValue;
+        });
+
+        console.log(data); // data object contains form data, you can send it using AJAX, for example
+
+        // Clear the form
+        while (fields.length) {
+          fields[0].remove();
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -5,22 +5,31 @@
   Author: Lokavit
   Birthtime: 2023/4/10 14:08:27
   -----
-  Mtime: 2023/4/20 21:45:10
-  WordCount: 318
+  Mtime: 2023/5/7 21:12:23
+  WordCount: 434
   -----
   Copyright © 1911 - 2023 Lokavit
       卍 · 小僧過境　衆生甦醒 · 卍
   =====<< 卍 · Description · 卍 >>=====
 
 -->
+
 # lib-js
 
-`javascript library` 
+`javascript library`
 
 - 最小、纯净、独立、原子化
 - 单文件，单函数。
 - 组合函数？**适用于复杂处理**
 - 函数式编程，类编程
+
+<!--
+class：使用时需实例化一次，若想多处使用，只能用不同的变量来new 这个clss
+const fun=()=>{}：声明式函数，在编写时，需要注意次第，被调用函数必须写在调用函数之前。
+function funcName(){}:普通函数写法，无需顾虑次第，随意在页面引入，使用。
+window.monk.someprops:原型链写法，自定义一个原型，挂载于window之下，引入使用随意。
+
+ -->
 
 ## npm link
 

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table Example</title>
+    <style>
+      table {
+        border: 1px solid aqua;
+      }
+      table th,
+      table td {
+        border: 1px solid antiquewhite;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="tableContainer"></div>
+
+    <script>
+      const data = {
+        thead: [
+          [
+            { prop: "a", rowspan: 5, text: "No." },
+            { prop: "b", colspan: 3, rowspan: 3, text: "固定价格" },
+            { prop: "c", rowspan: 5, text: "防水" },
+            { prop: "d", colspan: 6, text: "MAIETYPE" },
+            { prop: "e", colspan: 2, rowspan: 2, text: "板材" },
+            { prop: "f", colspan: 2, rowspan: 3, text: "模块类型" },
+          ],
+          [
+            { prop: "g", colspan: 3, text: "TYPE1" },
+            { prop: "h", colspan: 3, text: "TYPE2" },
+          ],
+          [
+            { prop: "i", colspan: 3, text: "TYPE1 报价" },
+            { prop: "j", colspan: 3, text: "TYPE2 报价" },
+            { prop: "k", rowspan: 3, text: "FRONT" },
+            { prop: "l", rowspan: 3, text: "REAR" },
+          ],
+          [
+            { prop: "m", colspan: 3, text: "Pin数" },
+            { prop: "n", colspan: 3, text: "PIN数" },
+            { prop: "o", colspan: 3, text: "Pin数" },
+            { prop: "p", rowspan: 2, text: "MODULE TYPE1" },
+            { prop: "q", rowspan: 2, text: "MODULE TYPE2" },
+          ],
+          [
+            { prop: "r", text: "1-4" },
+            { prop: "s", text: "4-5" },
+            { prop: "t", text: "6UP" },
+            { prop: "u", text: "1-4" },
+            { prop: "v", text: "4-5" },
+            { prop: "w", text: "6UP" },
+            { prop: "x", text: "1-4" },
+            { prop: "y", text: "4-5" },
+            { prop: "z", text: "6UP" },
+          ],
+        ],
+        tbody: [
+          [
+            { text: "tbody 1" },
+            { text: 852 },
+            { text: 357 },
+            { text: 159 },
+            { text: 789 },
+            { text: 9123 },
+            { text: 4456 },
+            { text: 1452 },
+            { text: 1342 },
+            { text: 1578 },
+            { text: 1320 },
+            { text: 147 },
+            { text: 258 },
+            { text: 369 },
+            { text: 963 },
+          ],
+          [
+            { text: "tbody 2" },
+            { text: 852 },
+            { text: 357 },
+            { text: 159 },
+            { text: 789 },
+            { text: 9123 },
+            { text: 4456 },
+            { text: 1452 },
+            { text: 1342 },
+            { text: 1578 },
+            { text: 1320 },
+            { text: 147 },
+            { text: 258 },
+            { text: 369 },
+            { text: 963 },
+          ],
+          [
+            { text: "new row" },
+            { text: 1000 },
+            { text: 2000 },
+            { text: 3000 },
+            { text: 4000 },
+            { text: 5000 },
+            { text: 6000 },
+            { text: 7000 },
+            { text: 8000 },
+            { text: 9000 },
+            { text: 10000 },
+            { text: 11000 },
+            { text: 12000 },
+            { text: 13000 },
+            { text: 14000 },
+          ],
+        ],
+      };
+
+      /**
+       * 尝试将该函数的event，向上或向下穿透一层
+       * 目的为拿到该tr的index值,通过该值，迅速定位该行数据(此方式适用于非编辑的table)
+       * 或者是，从当前td上溯到tr,再获取该行所有td的值(此方式更适用于在编辑中的table)
+      */
+      function handleRowChange(event) {
+        console.log("Row changed:", event);
+      }
+
+      function createTable(data) {
+        const table = document.createElement("table");
+
+        // Create table head
+        const thead = document.createElement("thead");
+        data.thead.forEach((rowData) => {
+          const row = document.createElement("tr");
+          rowData.forEach((cellData) => {
+            const th = document.createElement("th");
+            th.innerHTML = cellData.text;
+            if (cellData.rowspan) th.rowSpan = cellData.rowspan;
+            if (cellData.colspan) th.colSpan = cellData.colspan;
+            row.appendChild(th);
+          });
+          thead.appendChild(row);
+        });
+        table.appendChild(thead);
+
+        // Create table body
+        const tbody = document.createElement("tbody");
+        data.tbody.forEach((rowData) => {
+          const row = document.createElement("tr");
+          row.addEventListener("click", handleRowChange);
+          rowData.forEach((cellData) => {
+            const td = document.createElement("td");
+            td.innerHTML = cellData.text;
+            if (cellData.rowspan) td.rowSpan = cellData.rowspan;
+            if (cellData.colspan) td.colSpan = cellData.colspan;
+            row.appendChild(td);
+          });
+          tbody.appendChild(row);
+        });
+        table.appendChild(tbody);
+
+        return table;
+      }
+
+      
+      const table = createTable(data);
+      document.getElementById("tableContainer").appendChild(table);
+
+      // … Existing code …
+      /** 添加一行数据  */
+      function addRowToTable(table, rowData) {
+        const tbody = table.querySelector("tbody");
+        const row = document.createElement("tr");
+
+        rowData.forEach((cellData) => {
+          const td = document.createElement("td");
+          td.innerHTML = cellData.text;
+          if (cellData.rowspan) td.rowSpan = cellData.rowspan;
+          if (cellData.colspan) td.colSpan = cellData.colspan;
+          if (cellData.className) td.className = cellData.className;
+          row.appendChild(td);
+        });
+
+        tbody.appendChild(row);
+      }
+
+      // … Existing code …
+
+      // Example usage: Adding a new row after 3 seconds
+      //   setTimeout(() => {
+      //     const newRowData = [
+      //       { text: "tbody 2" },
+      //       { text: 1000 },
+      //       { text: 2000 },
+      //       { text: 3000 },
+      //       { text: 4000 },
+      //       { text: 5000 },
+      //       { text: 6000 },
+      //       { text: 7000 },
+      //       { text: 8000 },
+      //       { text: 9000 },
+      //       { text: 10000 },
+      //       { text: 11000 },
+      //       { text: 12000 },
+      //       { text: 13000 },
+      //       { text: 14000 },
+      //     ];
+
+      //     addRowToTable(table, newRowData);
+      //   }, 3000);
+
+      /** 添加一行的按钮 */
+      // … Existing code …
+
+      function addButtonRow(table) {
+        const tbody = table.querySelector("tbody");
+        const row = document.createElement("tr");
+        const td = document.createElement("td");
+        const _col = tbody.querySelector("tr:last-child").cells.length;
+
+        /**
+         * Adjust this value according to the number of columns in your table
+         * 根据表格列数，作为跨列的值。获取tbody的列数
+         */
+        td.colSpan = _col;
+
+        const button = document.createElement("button");
+        button.innerText = "Add Row";
+        // button.onclick = () => {
+        //   const newRowData = [
+        //     { text: "new row" },
+        //     { text: 1000 },
+        //     { text: 2000 },
+        //     { text: 3000 },
+        //     { text: 4000 },
+        //     { text: 5000 },
+        //     { text: 6000 },
+        //     { text: 7000 },
+        //     { text: 8000 },
+        //     { text: 9000 },
+        //     { text: 10000 },
+        //     { text: 11000 },
+        //     { text: 12000 },
+        //     { text: 13000 },
+        //     { text: 14000 },
+        //   ];
+        //   addRowAboveButtonRow(table, newRowData);
+        // };
+
+        td.appendChild(button);
+        row.appendChild(td);
+        tbody.appendChild(row);
+      }
+
+      function addRowAboveButtonRow1(table, rowData) {
+        const tbody = table.querySelector("tbody");
+        const lastRow = tbody.querySelector("tr:last-child");
+        const newRow = document.createElement("tr");
+
+        rowData.forEach((cellData) => {
+          const td = document.createElement("td");
+          td.innerHTML = cellData.text;
+          if (cellData.rowspan) td.rowSpan = cellData.rowspan;
+          if (cellData.colspan) td.colSpan = cellData.colspan;
+          newRow.appendChild(td);
+        });
+
+        tbody.insertBefore(newRow, lastRow);
+      }
+
+      // … Existing code …
+
+      addButtonRow(table);
+
+      // … Existing code …
+
+      function handleInputChange(event) {
+        console.log("Input changed:", event.target.name, event.target.value);
+      }
+
+      function handleSelectChange(event) {
+        console.log("Select changed:", event.target.name, event.target.value);
+      }
+
+      function handleCheckboxChange(event) {
+        console.log(
+          "Checkbox changed:",
+          event.target.name,
+          event.target.checked
+        );
+      }
+
+      // button.onclick = () => {
+      // document.querySelector("button").onclick = () => {
+      //   /** 新增的空行，默认可编辑 */
+      //   const newRowData = [
+      //     /**
+      //      * tagName:标签名字
+      //      * text:文本
+      //      */
+      //     { text: "tbody 2", tagName: "th" },
+      //     {
+      //       tagName: "td",
+      //       children: [
+      //         {
+      //           tagName: "input",
+      //           type: "text",
+      //           name: "pin1",
+      //           id: "pin1",
+      //           value: "",
+      //           onchange: handleInputChange,
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       tagName: "td",
+      //       children: [
+      //         {
+      //           tagName: "select",
+      //           name: "test1",
+      //           id: "test1",
+      //           onchange: handleSelectChange,
+      //           options: [
+      //             {
+      //               value: "a",
+      //               text: "A Value",
+      //               defaultValue: false,
+      //               selected: true,
+      //             },
+      //             { value: "b", text: "B ue" },
+      //             { value: "c", text: "C alu" },
+      //           ],
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       tagName: "td",
+      //       children: [
+      //         {
+      //           tagName: "input",
+      //           type: "checkbox",
+      //           name: "test3",
+      //           id: "test3",
+      //           value: "1",
+      //           checked: true,
+      //           onchange: handleCheckboxChange,
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       tagName: "td",
+      //       children: [
+      //         {
+      //           tagName: "input",
+      //           type: "number",
+      //           name: "pin3",
+      //           id: "pin3",
+      //           value: 0,
+      //           onchange: handleInputChange,
+      //         },
+      //       ],
+      //     },
+      //     { text: 1452 },
+      //     {
+      //       tagName: "td",
+      //       children: [
+      //         {
+      //           tagName: "input",
+      //           type: "text",
+      //           name: "pin2",
+      //           id: "pin2",
+      //           value: "一手",
+      //           onchange: handleInputChange,
+      //         },
+      //       ],
+      //     },
+      //     { text: 1342 },
+      //     {
+      //       tagName: "td",
+      //       children: [
+      //         {
+      //           tagName: "select",
+      //           name: "test2",
+      //           id: "test2",
+      //           onchange: handleSelectChange,
+      //           options: [
+      //             { value: "d", text: "D Value" },
+      //             {
+      //               value: "e",
+      //               text: "E ue",
+      //               defaultValue: false,
+      //               selected: true,
+      //             },
+      //             { value: "f", text: "F alu" },
+      //           ],
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       tagName: "td",
+      //       children: [
+      //         {
+      //           tagName: "input",
+      //           type: "checkbox",
+      //           name: "test4",
+      //           id: "test4",
+      //           value: "0",
+      //           onchange: handleCheckboxChange,
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       tagName: "td",
+      //       children: [
+      //         {
+      //           tagName: "input",
+      //           type: "number",
+      //           name: "pin4",
+      //           id: "pin4",
+      //           value: 0,
+      //           onchange: handleInputChange,
+      //         },
+      //       ],
+      //     },
+      //     { text: 4456 },
+      //     { text: 1578 },
+      //     { text: 1320 },
+      //     { text: 147 },
+      //   ];
+      //   addRowAboveButtonRow(table, newRowData);
+      // };
+
+      // … Existing code …
+
+      // Replace addRow FUNCTION with the following
+      function addRowAboveButtonRow(table, rowData) {
+        const tbody = table.querySelector("tbody");
+        const lastRow = tbody.querySelector("tr:last-child");
+        const newRow = document.createElement("tr");
+
+        rowData.forEach((cellData) => {
+          const cell = document.createElement(cellData.tagName || "td");
+
+          if (cellData.text) {
+            cell.innerText = cellData.text;
+          }
+
+          if (cellData.children) {
+            cellData.children.forEach((childData) => {
+              const child = document.createElement(childData.tagName);
+
+              if (
+                childData.tagName === "input" ||
+                childData.tagName === "select"
+              ) {
+                child.type = childData.type;
+                child.name = childData.name;
+                child.id = childData.id;
+                child.value = childData.value;
+
+                if (
+                  childData.tagName === "input" &&
+                  childData.type === "checkbox"
+                ) {
+                  child.checked = childData.checked;
+                }
+
+                if (childData.tagName === "select" && childData.options) {
+                  childData.options.forEach((optionData) => {
+                    const option = document.createElement("option");
+                    option.value = optionData.value;
+                    option.text = optionData.text;
+                    option.selected = optionData.selected;
+                    child.add(option);
+                  });
+                }
+
+                if (childData.onchange) {
+                  child.addEventListener("change", childData.onchange);
+                }
+              }
+
+              cell.appendChild(child);
+            });
+          }
+
+          newRow.appendChild(cell);
+        });
+
+        tbody.insertBefore(newRow, lastRow);
+      }
+    </script>
+    <script src="./testData.js"></script>
+    <script src="./dataFormat.js"></script>
+    <script>
+      console.log(SortingDataByArrayTarget(SORT_TARGET, TBODY_DATA));
+      console.log(
+        JSON.stringify(SortingDataByArrayTarget(SORT_TARGET, TBODY_DATA))
+      );
+    </script>
+  </body>
+</html>
+
+<!-- The table's thead is array :['id','name','age','fee','amount','wsx','xsw'],but the datas is:[{name:'Monk',id:'1',age:'13',fee:'aa',amount:'aqq',wsx:'xxx',xsw:'wer',dataTime:2023.05.07,opUser:'Admin'},{name:'Lokavit',id:'3',wsx:'xxx',xsw:'wer',age:'13',fee:'aa',amount:'aqq',dataTime:2023.05.07,opUser:'Admin'},{amount:'aqq',wsx:'xxx',name:'Satya',id:'1',age:'13',fee:'aa',xsw:'wer',dataTime:2023.05.07,opUser:'Admin'}] ,please Format them according to thead's array and arrange the properties that are not in the array in the default order -->
