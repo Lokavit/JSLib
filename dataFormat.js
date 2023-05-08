@@ -149,43 +149,6 @@ class LabelComponent {
   }
 }
 
-class InputComponent {
-  constructor() {
-    console.log("InputComponent:", this);
-  }
-  createInput(data, value) {
-    console.log("input data:", data);
-    console.log("input value:", value);
-    let _input = document.createElement("input");
-    _input.setAttribute("type", data.type);
-    _input.setAttribute("name:", data.prop);
-    _input.setAttribute("id:", data.prop);
-    _input.setAttribute("value", value || "");
-    if (data.type == "checkbox") {
-      _input.checked = value == 1 ? "checked" : "";
-    }
-    return _input;
-  }
-}
-
-class SelectComponent {
-  constructor() {
-    console.log("SelectComponent:", this);
-  }
-  createSelect(data, value) {
-    console.log("createSelect data:", data);
-    let _select = document.createElement("select");
-    if (!data.options) return;
-    data.options.map((item) => {
-      console.log("item?", item);
-      item.value == value
-        ? _select.options.add(new Option(value, item.key, false, true))
-        : _select.options.add(new Option(item.value, item.key));
-    });
-    return _select;
-  }
-}
-
 /**
  * 表单配置项
  */

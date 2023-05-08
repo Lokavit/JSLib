@@ -5,7 +5,7 @@
   Author: Lokavit
   Birthtime: 2023/5/7 13:17:33
   -----
-  Mtime: 2023/5/7 13:17:33
+  Mtime: 2023/5/7 13:17:46
   WordCount: 0
   -----
   Copyright © 1911 - 2023 Lokavit
@@ -13,3 +13,21 @@
   =====<< 卍 · Description · 卍 >>=====
 
 */
+
+class SelectComponent {
+  constructor() {
+    console.log("SelectComponent:", this);
+  }
+  createSelect(data, value) {
+    console.log("createSelect data:", data);
+    let _select = document.createElement("select");
+    if (!data.options) return;
+    data.options.map((item) => {
+      console.log("item?", item);
+      item.value == value
+        ? _select.options.add(new Option(value, item.key, false, true))
+        : _select.options.add(new Option(item.value, item.key));
+    });
+    return _select;
+  }
+}

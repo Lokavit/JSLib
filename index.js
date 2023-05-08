@@ -5,7 +5,7 @@
   Author: Lokavit
   Birthtime: 2023/5/7 15:07:42
   -----
-  Mtime: 2023/5/8 00:12:58
+  Mtime: 2023/5/8 00:13:44
   WordCount: 522
   -----
   Copyright © 1911 - 2023 Lokavit
@@ -231,20 +231,21 @@ const TABLE_NAME_A = {
 class Index {
   constructor(prop) {
     console.log("Page:", prop);
-    TABLE_NAME_A.data = prop;
 
-    console.log("Index this._prop", TABLE_NAME_A);
+    // TABLE_NAME_A.data = prop;
 
-    /** 使用 Table Component */
-    const ComponentTableA = new TableComponent(TABLE_NAME_A);
-    console.log("A:", ComponentTableA);
-    const tableA = ComponentTableA.init();
-    document.body.appendChild(tableA);
+    // console.log("Index this._prop", TABLE_NAME_A);
 
-    const ComponentTableB = new TableComponent(TABLE_NAME_A);
-    console.log("B:", ComponentTableA);
-    const tableB = ComponentTableB.init();
-    document.body.appendChild(tableB);
+    // /** 使用 Table Component */
+    // const ComponentTableA = new TableComponent(TABLE_NAME_A);
+    // console.log("A:", ComponentTableA);
+    // const tableA = ComponentTableA.init();
+    // document.body.appendChild(tableA);
+
+    // const ComponentTableB = new TableComponent(TABLE_NAME_A);
+    // console.log("B:", ComponentTableA);
+    // const tableB = ComponentTableB.init();
+    // document.body.appendChild(tableB);
   }
 }
 
