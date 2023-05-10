@@ -5,7 +5,7 @@
   Author: Lokavit
   Birthtime: 2023/5/7 13:17:25
   -----
-  Mtime: 2023/5/8 19:04:05
+  Mtime: 2023/5/10 21:10:26
   WordCount: 0
   -----
   Copyright © 1911 - 2023 Lokavit
@@ -18,16 +18,16 @@ class InputComponent {
   constructor() {
     console.log("InputComponent:", this);
   }
-  createInput(data) {
+  render(data) {
     console.log("input data:", data);
-    let _input = document.createElement("input");
-    _input.setAttribute("type", data.type);
-    _input.setAttribute("name:", data.prop);
-    _input.setAttribute("id:", data.prop);
-    _input.setAttribute("value", data.value || "");
+    const input = document.createElement("input");
+    input.setAttribute("type", data.type);
+    input.setAttribute("name:", data.prop);
+    input.setAttribute("id:", data.prop);
+    input.setAttribute("value", data.value || "");
     if (data.type == "checkbox") {
-      _input.checked = value == 1 ? "checked" : "";
+      input.checked = value == 1 ? "checked" : "";
     }
-    return _input;
+    return input;
   }
 }

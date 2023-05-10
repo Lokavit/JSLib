@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Lazy Loading Table</title>
+    <style>
+      #table-container {
+        height: 500px;
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="table-container">
+      <div id="table-wrapper"></div>
+    </div>
+    <div id="testInnerHTML"></div>
+    <div id="testCreateElement"></div>
+    <div id="testCreateDocumentFragment"></div>
+    <div id="testInsertAdjacentElement"></div>
+    <!-- <script src="script.js"></script> -->
+    <script>
+      const batchSize = 30; // Number of rows per batch
+      const totalRows = 10000; // Total number of rows
+      const columns = 10; // Number of columns
+
+      const tableWrapper = document.getElementById("table-wrapper");
+      const tableContainer = document.getElementById("table-container");
+
+      let currentRowIndex = 0;
+
+      function generateSampleDataRow(rowIndex) {
+        const rowData = [];
+        for (let i = 0; i < columns; i++) {
+          rowData.push(`Data-${rowIndex}-${i}`);
+        }
+        return rowData;
+      }
+
+      function renderRow(data) {
+        const row = document.createElement("tr");
+        for (const cellData of data) {
+          const cell = document.createElement("td");
+          cell.textContent = cellData;
+          cell.style.border = "1px solid #ccc";
+          cell.style.padding = "8px";
+          row.appendChild(cell);
+        }
+        return row;
+      }
+
+      function loadBatch() {
+        console.log("加载中……");
+        const start = currentRowIndex;
+        const end = Math.min(currentRowIndex + batchSize, totalRows);
+        for (let i = start; i < end; i++) {
+          const rowData = generateSampleDataRow(i);
+          const row = renderRow(rowData);
+          tableWrapper.appendChild(row);
+        }
+        currentRowIndex += batchSize;
+      }
+
+      function handleScroll(event) {
+        const { scrollHeight, scrollTop, clientHeight } = event.target;
+        if (
+          scrollHeight - scrollTop === clientHeight &&
+          currentRowIndex < totalRows
+        ) {
+          loadBatch();
+        }
+      }
+
+      function init() {
+        tableWrapper.style.display = "table";
+        tableWrapper.style.borderCollapse = "collapse";
+        tableWrapper.style.width = "100%";
+
+        loadBatch();
+
+        tableContainer.addEventListener("scroll", handleScroll);
+      }
+
+      init();
+
+      // Example data
+      const data = [
+        { fee: "any value", id: 1, op: "value" },
+        { fee: "anvalue", id: 2, op: "vlue" },
+      ];
+
+      function transformData(data) {
+        const transformedData = [];
+
+        for (const item of data) {
+          const transformedItem = [];
+
+          for (const key in item) {
+            const value = item[key];
+            transformedItem.push({ prop: key, text: value });
+          }
+
+          transformedData.push(transformedItem);
+        }
+
+        return transformedData;
+      }
+      const transformedData = transformData(data);
+      console.log(transformedData);
+
+      class StateManager {
+        constructor(initialState = {}) {
+          this.state = initialState;
+          this.listeners = [];
+        }
+
+        getState() {
+          return this.state;
+        }
+
+        setState(newState) {
+          this.state = { ...this.state, ...newState };
+          this.listeners.forEach((listener) => listener(this.state));
+        }
+
+        subscribe(listener) {
+          this.listeners.push(listener);
+          // Return an unsubscribe function
+          return () => {
+            this.listeners = this.listeners.filter((l) => l !== listener);
+          };
+        }
+      }
+
+      // Usage
+      const stateManager = new StateManager({ count: 0 });
+
+      // Subscribe to state changes
+      const unsubscribe = stateManager.subscribe((state) => {
+        console.log("State changed:", state);
+      });
+
+      // Update state
+      stateManager.setState({ count: stateManager.getState().count + 1 });
+
+      // Unsubscribe from state changes
+      unsubscribe();
+
+      //   <div id="testInnerHTML"></div>
+      // <div id="testCreateElement"></div>
+      // <div id="testCreateDocumentFragment"></div>
+      // <div id="testInsertAdjacentElement"></div>
+      //   性能测试
+
+      /** 避免使用 */
+      function testInnerHTML() {
+        let _startTime = new Date().getTime();
+
+        let div = document.querySelector("#testInnerHTML");
+        for (let i = 0; i < 999; i++) {
+          div.innerHTML += `<li>${i}</li>`;
+        }
+        let _endTime = new Date().getTime();
+        console.log("testInnerHTML 总耗时:", _endTime - _startTime);
+      }
+
+      function testCreateElement() {
+        let _startTime = new Date().getTime();
+        let div = document.querySelector("#testCreateElement");
+        for (let i = 0; i < 999; i++) {
+          let li = document.createElement("li");
+          li.textContent = i;
+          div.appendChild(li);
+        }
+        let _endTime = new Date().getTime();
+        console.log("testCreateElement 总耗时:", _endTime - _startTime);
+      }
+
+      function testCreateDocumentFragment() {
+        let _startTime = new Date().getTime();
+
+        let div = document.querySelector("#testCreateDocumentFragment");
+        let _temp = document.createDocumentFragment();
+        for (let i = 0; i < 999; i++) {
+          let li = document.createElement("li");
+          li.textContent = i;
+          _temp.appendChild(li);
+        }
+        div.appendChild(_temp);
+
+        let _endTime = new Date().getTime();
+        console.log(
+          "testCreateDocumentFragment 总耗时:",
+          _endTime - _startTime
+        );
+      }
+      function testInsertAdjacentElement() {
+        let _startTime = new Date().getTime();
+
+        let div = document.querySelector("#testInsertAdjacentElement");
+        // let _temp = document.createDocumentFragment();
+        for (let i = 0; i < 999; i++) {
+          let li = document.createElement("li");
+          li.textContent = i;
+          _temp.appendChild(li);
+        }
+        div.insertAdjacentElement("afterbegin", _temp);
+        let _endTime = new Date().getTime();
+        console.log("testInsertAdjacentElement 总耗时:", _endTime - _startTime);
+      }
+
+      //   testInnerHTML();// 1164
+    //   testCreateElement();
+    //   testCreateDocumentFragment();
+    //   testInsertAdjacentElement();
+    </script>
+  </body>
+</html>

@@ -5,7 +5,7 @@
   Author: Lokavit
   Birthtime: 2023/5/7 13:17:33
   -----
-  Mtime: 2023/5/7 13:17:46
+  Mtime: 2023/5/8 19:00:58
   WordCount: 0
   -----
   Copyright © 1911 - 2023 Lokavit
@@ -20,14 +20,14 @@ class SelectComponent {
   }
   createSelect(data, value) {
     console.log("createSelect data:", data);
-    let _select = document.createElement("select");
+    const select = document.createElement("select");
     if (!data.options) return;
     data.options.map((item) => {
       console.log("item?", item);
       item.value == value
-        ? _select.options.add(new Option(value, item.key, false, true))
-        : _select.options.add(new Option(item.value, item.key));
+        ? select.options.add(new Option(value, item.key, false, true))
+        : select.options.add(new Option(item.value, item.key));
     });
-    return _select;
+    return select;
   }
 }
