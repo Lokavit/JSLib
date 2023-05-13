@@ -4,12 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JavaScript Lazy Loading Table</title>
-    <style>
-      #table-container {
-        height: 500px;
-        overflow-y: scroll;
-      }
-    </style>
   </head>
   <body>
     <div id="table-container">
@@ -21,6 +15,35 @@
     <div id="testInsertAdjacentElement"></div>
     <!-- <script src="script.js"></script> -->
     <script>
+      const tempData3 = [
+        "{'001',{111:123,113:321,134:654,135:456,136:1554,101:56800,109:0,115:0}}",
+        "{'006',{111:113,113:3211,134:154,135:156,136:154,101:5800,109:10,115:1000}}",
+      ];
+
+      // [{ mname: '001', 111:123,113:321,134:654,135:456,136:1554,101:56800,109:0,115:0},{mname: '006', 111:113,113:3211,134:154,135:156,136:154,101:5800,109:10,115:1000}]
+
+      // I have string "{111:123,113:321,134:654,135:456,136:1554,101:56800,109:0,115:0}", but I need string to object ,please use JavaScript
+
+      const formattedData3 = tempData3.map((item) => {
+        // 把第一个逗号前面的数据提出来
+        // item.replace("{'","{mname:'");
+        // console.log(item.replace("{'", "{mname:'"));
+
+        console.log("正则匹配名字:", item.match(/{\S*,{/g)[0].slice(1, -2));
+        // 先找到 ,{....}}，而后，切除首尾各一字符，留下 {....},方便转为JSON
+        console.log("正则匹配{...}:", item.match(/,{\S*}}/g)[0].slice(1, -1));
+
+        // let str = item.match(/,{\S*}}/g)[0].slice(1, -1);
+        // console.log("字符串转Object:", eval("(" + str + ")"));
+
+        return {
+          mname: item.match(/{\S*,{/g)[0].slice(1, -2),
+          ...eval("(" + item.match(/,{\S*}}/g)[0].slice(1, -1) + ")"),
+        };
+      });
+
+      console.log("最终处理的数据:", formattedData3);
+
       const tempData = [
         { fee: "NO", id: 1, feeCol: "5,1", seq: 1 },
         { fee: "客户名", id: 3, feeCol: "5,1", seq: 2 },
@@ -32,7 +55,7 @@
       /**
        * 格式化为:
        * [{prop:'id_1',text:'NO',rowspan:5,colspan:1},{prop:'id_3',text:'客户名',rowspan:5,colspan:1},{prop:'id_3',text:'基本单价',rowspan:2,colspan:3},{prop:'id_5',text:'防水',rowspan:5,colspan:1},{prop:'id_6',text:'Pin数',rowspan:1,colspan:3},{prop:'id_7',text:'1P以上',rowspan:1,colspan:1}]
-      */
+       */
       const formattedData = tempData.map((item) => {
         const [rowspan, colspan] = item.feeCol.split(",").map(Number);
         return {

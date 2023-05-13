@@ -5,8 +5,8 @@
   Author: Lokavit
   Birthtime: 2023/5/7 14:11:55
   -----
-  Mtime: 2023/5/8 00:09:46
-  WordCount: 160
+  Mtime: 2023/5/8 00:11:03
+  WordCount: 187
   -----
   Copyright © 1911 - 2023 Lokavit
       卍 · 小僧過境　衆生甦醒 · 卍
@@ -32,6 +32,12 @@ class TableComponent {
     console.log("This is TableComponent:", prop);
     this._prop = prop;
     /** 在这里处理一些数据 */
+    /** 每次加载数据条数 */
+    this._batchSize = 10;
+    /** 数据总条数 */
+    this._totalRows = this._prop.tbody.data.length;
+    /** 当前最大行数 */
+    this._currentRowIndex = 0;
   }
   /**
    * 通常在实例化之后，调用该函数，构建一个Table
@@ -41,7 +47,19 @@ class TableComponent {
     const table = document.createElement("table");
     table.appendChild(this.createThead(this._prop.thead));
     table.appendChild(this.createTbody(this._prop.tbody));
+    // 给table绑一个滚动事件
+    table.addEventListener("scroll", this.handleScroll.bind(this));
     return table;
+  }
+
+  handleScroll(event) {
+    const { scrollHeight, scrollTop, clientHeight } = event.target;
+    if (
+      scrollHeight - scrollTop === clientHeight &&
+      this._currentRowIndex < this._totalRows
+    ) {
+      // loadBatch();
+    }
   }
   createThead(data) {
     console.log("createThead:", data);

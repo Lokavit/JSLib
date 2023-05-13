@@ -5,7 +5,7 @@
   Author: Lokavit
   Birthtime: 2023/4/10 14:08:27
   -----
-  Mtime: 2023/5/10 20:52:42
+  Mtime: 2023/5/13 23:20:49
   WordCount: 434
   -----
   Copyright © 1911 - 2023 Lokavit
@@ -30,10 +30,13 @@ function funcName(){}:普通函数写法，无需顾虑次第，随意在页面�
 window.monk.someprops:原型链写法，自定义一个原型，挂载于window之下，引入使用随意。
 
 
-I have data:
-[{fee:'NO',id:1,feeCol:5,1,seq:1},{fee:'客户名',id:3,feeCol:5,1,seq:2},{fee:'基本单价',id:3,feeCol:2,3,seq:3},{fee:'防水',id:5,feeCol:5,1,seq:4},{fee:'Pin数',id:6,feeCol:1,3,seq:3},{fee:'1P 以上',id:7,feeCol:1,1,seq:3}]
+Please talk me ,How can quick update data in html,It is better to change only the data and not the html structure
 
-I need foramat data:[{prop:'id_1',text:'NO',rowspan:5,colspan:1},{prop:'id_3',text:'客户名',rowspan:5,colspan:1},{prop:'id_3',text:'基本单价',rowspan:2,colspan:3},{prop:'id_5',text:'防水',rowspan:5,colspan:1},{prop:'id_6',text:'Pin数',rowspan:1,colspan:3},{prop:'id_7',text:'1P以上',rowspan:1,colspan:1}]
+Please use JavaScript
+
+I have data:"{'001',{111:123,113:321,134:654,135:456,136:1554,101:56800,109:0,115:0}}","{'006',{111:113,113:3211,134:154,135:156,136:154,101:5800,109:10,115:1000}}"];
+      
+I need formatting data:[{ mname: '001', 111:123,113:321,134:654,135:456,136:1554,101:56800,109:0,115:0},{mname: '006', 111:113,113:3211,134:154,135:156,136:154,101:5800,109:10,115:1000}]
 
  -->
 
