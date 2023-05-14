@@ -5,14 +5,130 @@
   Author: Lokavit
   Birthtime: 2023/5/6 19:21:55
   -----
-  Mtime: 2023/5/7 13:53:40
-  WordCount: 141
+  Mtime: 2023/5/14 15:13:17
+  WordCount: 226
   -----
   Copyright © 1911 - 2023 Lokavit
       卍 · 小僧過境　衆生甦醒 · 卍
   =====<< 卍 · Description · 卍 >>=====
   some data formatter 
 */
+
+const tempData3 = [
+  "{'001',{111:123,113:321,134:654,135:456,136:1554,101:56800,109:0,115:0}}",
+  "{'006',{111:113,113:3211,134:154,135:156,136:154,101:5800,109:10,115:1000}}",
+];
+
+// [{ mname: '001', 111:123,113:321,134:654,135:456,136:1554,101:56800,109:0,115:0},{mname: '006', 111:113,113:3211,134:154,135:156,136:154,101:5800,109:10,115:1000}]
+
+// I have string "{111:123,113:321,134:654,135:456,136:1554,101:56800,109:0,115:0}", but I need string to object ,please use JavaScript
+
+const formattedData3 = tempData3.map((item) => {
+  // 把第一个逗号前面的数据提出来
+  // item.replace("{'","{mname:'");
+  // console.log(item.replace("{'", "{mname:'"));
+
+  console.log("正则匹配名字:", item.match(/{\S*,{/g)[0].slice(1, -2));
+  // 先找到 ,{....}}，而后，切除首尾各一字符，留下 {....},方便转为JSON
+  console.log("正则匹配{...}:", item.match(/,{\S*}}/g)[0].slice(1, -1));
+
+  // let str = item.match(/,{\S*}}/g)[0].slice(1, -1);
+  // console.log("字符串转Object:", eval("(" + str + ")"));
+
+  return {
+    mname: item.match(/{\S*,{/g)[0].slice(1, -2),
+    ...eval("(" + item.match(/,{\S*}}/g)[0].slice(1, -1) + ")"),
+  };
+});
+
+console.log("最终处理的数据:", formattedData3);
+
+const tempData = [
+  { fee: "NO", id: 1, feeCol: "5,1", seq: 1 },
+  { fee: "客户名", id: 3, feeCol: "5,1", seq: 2 },
+  { fee: "基本单价", id: 3, feeCol: "2,3", seq: 3 },
+  { fee: "防水", id: 5, feeCol: "5,1", seq: 4 },
+  { fee: "Pin数", id: 6, feeCol: "1,3", seq: 3 },
+  { fee: "1P 以上", id: 7, feeCol: "1,1", seq: 3 },
+];
+/**
+ * 格式化为:
+ * [{prop:'id_1',text:'NO',rowspan:5,colspan:1},{prop:'id_3',text:'客户名',rowspan:5,colspan:1},{prop:'id_3',text:'基本单价',rowspan:2,colspan:3},{prop:'id_5',text:'防水',rowspan:5,colspan:1},{prop:'id_6',text:'Pin数',rowspan:1,colspan:3},{prop:'id_7',text:'1P以上',rowspan:1,colspan:1}]
+ */
+const formattedData = tempData.map((item) => {
+  const [rowspan, colspan] = item.feeCol.split(",").map(Number);
+  return {
+    prop: `id_${item.id}`,
+    text: item.fee,
+    rowspan,
+    colspan,
+  };
+});
+
+console.log(formattedData);
+
+// Example data
+const data = [
+  { fee: "any value", id: 1, op: "value" },
+  { fee: "anvalue", id: 2, op: "vlue" },
+];
+
+function transformData(data) {
+  const transformedData = [];
+
+  for (const item of data) {
+    const transformedItem = [];
+
+    for (const key in item) {
+      const value = item[key];
+      transformedItem.push({ prop: key, text: value });
+    }
+
+    transformedData.push(transformedItem);
+  }
+
+  return transformedData;
+}
+const transformedData = transformData(data);
+console.log(transformedData);
+
+class StateManager {
+  constructor(initialState = {}) {
+    this.state = initialState;
+    this.listeners = [];
+  }
+
+  getState() {
+    return this.state;
+  }
+
+  setState(newState) {
+    this.state = { ...this.state, ...newState };
+    this.listeners.forEach((listener) => listener(this.state));
+  }
+
+  subscribe(listener) {
+    this.listeners.push(listener);
+    // Return an unsubscribe function
+    return () => {
+      this.listeners = this.listeners.filter((l) => l !== listener);
+    };
+  }
+}
+
+// Usage
+const stateManager = new StateManager({ count: 0 });
+
+// Subscribe to state changes
+const unsubscribe = stateManager.subscribe((state) => {
+  console.log("State changed:", state);
+});
+
+// Update state
+stateManager.setState({ count: stateManager.getState().count + 1 });
+
+// Unsubscribe from state changes
+unsubscribe();
 
 /**
  * 根据传入目标，将获取到的数据重新排序

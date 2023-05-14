@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .h_layout {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-self: flex-start;
+      }
+      .h_layout div {
+        max-height: 30vh;
+        max-width: 60vw;
+        min-width: 30vw;
+        text-align: center;
+        border: 0.1rem solid aqua;
+      }
+      .table_container {
+        overflow-y: scroll;
+      }
+
+      .component {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        font-family: Arial, sans-serif;
+      }
+      .image-preview {
+        border: 1px solid #ddd;
+        width: 300px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0;
+        font-size: 14px;
+        color: #666;
+      }
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+      .nav-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .form {
+        background-color: aquamarine;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        max-width: 45rem;
+      }
+      .form div {
+        background-color: antiquewhite;
+        padding: 0.3rem 3rem;
+      }
+      .form div label {
+        display: inline-block;
+        min-width: 5rem;
+        text-align: right;
+        padding-right: 1rem;
+      }
+      /* .form div input {
+        display: inline-block;
+        max-width: 9rem;
+      } */
+      .form div select,
+      .form div input {
+        display: inline-block;
+        min-width: 9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <section>A</section>
+      <section class="h_layout">
+        <div>
+          <section>B</section>
+          <section><div id="form-container"></div></section>
+        </div>
+        <div>
+          <div class="component">
+            <input type="file" id="fileInput" multiple />
+            <div class="image-preview" id="imagePreview">
+              No image to preview
+            </div>
+            <div class="nav-buttons">
+              <button id="prevButton" disabled>Prev</button>
+              <button id="nextButton" disabled>Next</button>
+            </div>
+          </div>
+        </div>
+        <div class="table_container">
+          <div id="table_wrapper"></div>
+        </div>
+      </section>
+      <section>F</section>
+    </div>
+
+    <script>
+      // Configuration object
+      const config = [
+        { type: "text", id: "pin1", labelText: "Text Value:", value: "" },
+        {
+          type: "select",
+          id: "test2",
+          labelText: "Tex Value:",
+          options: [
+            { value: "d", text: "DValue" },
+            { value: "e", text: "Eue" },
+            { value: "f", text: "Falu" },
+          ],
+        },
+        {
+          type: "checkbox",
+          id: "test4",
+          labelText: "Tex lue:",
+          value: "1",
+          checked: true,
+        },
+        { type: "number", id: "pin4", labelText: "Vale:", value: "0" },
+      ];
+
+      document.addEventListener("DOMContentLoaded", function () {
+        createDynamicForm();
+      });
+
+      function createDynamicForm() {
+        const container = document.getElementById("form-container");
+
+        const form = document.createElement("form");
+        form.setAttribute("class", "form");
+        form.setAttribute("style", "display: flex; flex-direction: row;");
+
+        config.forEach((field) => {
+          let elementDiv;
+          switch (field.type) {
+            case "text":
+            case "number":
+              elementDiv = createInputDiv(
+                field.id,
+                field.type,
+                field.labelText,
+                field.value
+              );
+              break;
+            case "select":
+              elementDiv = createSelectDiv(
+                field.id,
+                field.labelText,
+                field.options
+              );
+              break;
+            case "checkbox":
+              elementDiv = createInputDiv(
+                field.id,
+                field.type,
+                field.labelText,
+                field.value,
+                field.checked
+              );
+              break;
+            default:
+              break;
+          }
+          form.appendChild(elementDiv);
+        });
+
+        container.appendChild(form);
+      }
+
+      function createInputDiv(id, type, labelText, value, checked) {
+        const div = document.createElement("div");
+
+        const inputLabel = document.createElement("label");
+        inputLabel.setAttribute("for", id);
+        inputLabel.innerText = labelText;
+        div.appendChild(inputLabel);
+
+        const input = document.createElement("input");
+        input.setAttribute("type", type);
+        input.setAttribute("name", id);
+        input.setAttribute("id", id);
+        input.setAttribute("value", value);
+        if (checked) {
+          input.setAttribute("checked", true);
+        }
+        div.appendChild(input);
+
+        return div;
+      }
+
+      function createSelectDiv(id, labelText, options) {
+        const div = document.createElement("div");
+
+        const selectLabel = document.createElement("label");
+        selectLabel.setAttribute("for", id);
+        selectLabel.innerText = labelText;
+        div.appendChild(selectLabel);
+
+        const select = document.createElement("select");
+        select.setAttribute("name", id);
+        select.setAttribute("id", id);
+
+        options.forEach((option) => {
+          const opt = document.createElement("option");
+          opt.setAttribute("value", option.value);
+          opt.innerText = option.text;
+          select.appendChild(opt);
+        });
+
+        div.appendChild(select);
+
+        return div;
+      }
+    </script>
+
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const prevButton = document.getElementById("prevButton");
+      const nextButton = document.getElementById("nextButton");
+      const imagePreview = document.getElementById("imagePreview");
+
+      let images = [];
+      let currentImageIndex = -1;
+
+      fileInput.addEventListener("change", handleFileUpload);
+      prevButton.addEventListener("click", showPrevImage);
+      nextButton.addEventListener("click", showNextImage);
+
+      function handleFileUpload() {
+        images = Array.from(fileInput.files).filter((file) =>
+          file.type.startsWith("image/")
+        );
+        currentImageIndex = -1;
+
+        if (images.length > 0) {
+          currentImageIndex = 0;
+          showImage();
+          updateNavigationButtons();
+        } else {
+          imagePreview.innerHTML = "No image to preview";
+          prevButton.disabled = true;
+          nextButton.disabled = true;
+        }
+      }
+
+      function showImage() {
+        if (currentImageIndex >= 0 && currentImageIndex < images.length) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview"/>`;
+          };
+          reader.readAsDataURL(images[currentImageIndex]);
+        } else {
+          imagePreview.innerHTML = "No image to preview";
+        }
+      }
+
+      function showPrevImage() {
+        if (currentImageIndex > 0) {
+          currentImageIndex--;
+          showImage();
+          updateNavigationButtons();
+        }
+      }
+
+      function showNextImage() {
+        if (currentImageIndex < images.length - 1) {
+          currentImageIndex++;
+          showImage();
+          updateNavigationButtons();
+        }
+      }
+
+      function updateNavigationButtons() {
+        prevButton.disabled = currentImageIndex === 0;
+        nextButton.disabled = currentImageIndex === images.length - 1;
+      }
+    </script>
+    <!--  -->
+    <script>
+      const batchSize = 30; // Number of rows per batch
+      const totalRows = 10000; // Total number of rows
+      const columns = 10; // Number of columns
+
+      const tableContainer = document.querySelector(".table_container");
+      const tableWrapper = document.querySelector("#table_wrapper");
+
+      let currentRowIndex = 0;
+
+      function generateSampleDataRow(rowIndex) {
+        const rowData = [];
+        for (let i = 0; i < columns; i++) {
+          rowData.push(`Data-${rowIndex}-${i}`);
+        }
+        return rowData;
+      }
+
+      function renderRow(data) {
+        const row = document.createElement("tr");
+        for (const cellData of data) {
+          const cell = document.createElement("td");
+          cell.textContent = cellData;
+          cell.style.border = "1px solid #ccc";
+          cell.style.padding = "8px";
+          row.appendChild(cell);
+        }
+        return row;
+      }
+
+      function loadBatch() {
+        console.log("加载中……");
+        const start = currentRowIndex;
+        const end = Math.min(currentRowIndex + batchSize, totalRows);
+        for (let i = start; i < end; i++) {
+          const rowData = generateSampleDataRow(i);
+          const row = renderRow(rowData);
+          tableWrapper.appendChild(row);
+        }
+        currentRowIndex += batchSize;
+      }
+
+      function handleScroll(event) {
+        const { scrollHeight, scrollTop, clientHeight } = event.target;
+        if (
+          scrollHeight - scrollTop === clientHeight &&
+          currentRowIndex < totalRows
+        ) {
+          loadBatch();
+        }
+      }
+
+      function init() {
+        tableWrapper.style.display = "table";
+        tableWrapper.style.borderCollapse = "collapse";
+        tableWrapper.style.width = "100%";
+
+        loadBatch();
+
+        tableContainer.addEventListener("scroll", handleScroll);
+      }
+
+      init();
+    </script>
+  </body>
+</html>
