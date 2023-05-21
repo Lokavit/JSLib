@@ -10,6 +10,48 @@
     <h1>This is JSP Page</h1>
     <section id="tableContainer"></section>
 
+    <!-- <div id="root"></div>
+    <script src="./src/components/component.js"></script>
+    <script src="./src/components/testComponent.js"></script>
+    <script>
+      const root = document.getElementById("root");
+      const component = new MyComponent();
+      component.render();
+      root.appendChild(component.element);
+    </script> -->
+
+    <table id="table">
+      <thead>
+        <tr>
+          <th>A</th>
+          <th>C</th>
+          <th>E</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td contenteditable="true">111111111111111111</td>
+          <td contenteditable="true">333333333333333333</td>
+          <td contenteditable="true">55555555555555555</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script>
+      /**
+       * 只给table挂一个input事件
+       * 尚未测试，挂一个change事件
+      */
+
+      document
+        .querySelector("#table")
+        .addEventListener("input", handleInputCellEvent);
+      function handleInputCellEvent(event) {
+        console.log(event);
+        console.log(event.target.textContent);
+      }
+    </script>
+
     <script src="./src/components/Table.js"></script>
     <script src="./demoTable.js"></script>
 
@@ -29,7 +71,7 @@
 
         /**
          * 获取Table上的数据
-        */
+         */
         function getDataFromTable() {
           const data = [];
           for (const row of table.rows) {
