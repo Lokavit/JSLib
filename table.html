@@ -7,98 +7,84 @@
     <title>Document</title>
   </head>
   <body>
-    <table id="dataTable" border="1">
-      <thead></thead>
-      <tbody></tbody>
-    </table>
+    <h1>This is JSP Page</h1>
+    <section id="tableContainer"></section>
+
+    <script src="./src/components/Table.js"></script>
+    <script src="./demoTable.js"></script>
 
     <script>
-      //       const data = [
-      //     {“MAIETYPE”:“TYPE1”,“Column9”:“TYPE2”},
-      //     {“MAIETYPE”:“TYPE1 报价”,“Column9”:“TYPE2 报价”,“板材”:“FRONT”,“Column13”:“REAR”},
-      //     {“固定价格”:“Pin数”,“MAIETYPE”:“PIN数”,“Column9”:“Pin数”,“模块类型”:“MODULE TYPE1”,“Column15”:“MODULE TYPE2”},
-      //     {“固定价格”:“1–4”,“Column3”:“4–5”,“Column4”:“6UP”,“MAIETYPE”:“1–4”,“Column7”:“4–5”,“Column8”:“6UP”,“Column9”:“1–4”,“Column10”:“4–5”,“Column11”:“6UP”},
-      //     {“No.”:1,“固定价格”:852,“Column3”:357,“Column4”:159,“防水”:789,“MAIETYPE”:9123,“Column7”:4456,“Column8”:1452,“Column9”:1342,“Column10”:1578,“Column11”:1320,“板材”:147,“Column13”:258,“模块类型”:369,“Column15”:963}
-      //   ];
+      // const TABLE_DATA =${jsonStr};
+      /**
+       * 实例化页面类
+       * 一些需要传递到页面实例化的数据
+       */
+      const pageTable = new PageTable({
+        msg: "Monk",
+      });
 
-      const data = [
-        { MAIETYPE: "TYPE1", Column9: "TYPE2" },
-        {
-          MAIETYPE: "TYPE1 报价",
-          Column9: "TYPE2 报价",
-          板材: "FRONT",
-          Column13: "REAR",
-        },
-        {
-          固定价格: "Pin数",
-          MAIETYPE: "PIN数",
-          Column9: "Pin数",
-          模块类型: "MODULE TYPE1",
-          Column15: "MODULE TYPE2",
-        },
-        {
-          固定价格: "1--4",
-          Column3: "4--5",
-          Column4: "6UP",
-          MAIETYPE: "1--4",
-          Column7: "4--5",
-          Column8: "6UP",
-          Column9: "1--4",
-          Column10: "4--5",
-          Column11: "6UP",
-        },
-        {
-          "No.": 1,
-          固定价格: 852,
-          Column3: 357,
-          Column4: 159,
-          防水: 789,
-          MAIETYPE: 9123,
-          Column7: 4456,
-          Column8: 1452,
-          Column9: 1342,
-          Column10: 1578,
-          Column11: 1320,
-          板材: 147,
-          Column13: 258,
-          模块类型: 369,
-          Column15: 963,
-        },
-      ];
+      function test() {
+        const table = document.getElementById("editableTable");
+        const tableData = getDataFromTable();
 
-      function createTable(data) {
-        const table = document.getElementById("dataTable");
-        const thead = table.querySelector("thead");
-        const tbody = table.querySelector("tbody");
+        /**
+         * 获取Table上的数据
+        */
+        function getDataFromTable() {
+          const data = [];
+          for (const row of table.rows) {
+            const rowData = [];
+            data.push(rowData);
+            for (const cell of row.cells) {
+              rowData.push(cell.textContent || cell.innerText);
+            }
+          }
+          return data;
+        }
 
-        // Create table header
-        const headerRow = document.createElement("tr");
-        const allKeys = Array.from(new Set(data.flatMap(Object.keys)));
+        function createVirtualDOM(data) {
+          const table = document.createElement("table");
+          const thead = table.createTHead();
+          const tbody = table.appendChild(document.createElement("tbody"));
 
-        allKeys.forEach((key) => {
-          const th = document.createElement("th");
-          th.innerText = key;
-          headerRow.appendChild(th);
-        });
-
-        thead.appendChild(headerRow);
-
-        // Create table body
-        data.forEach((item) => {
-          const row = document.createElement("tr");
-
-          allKeys.forEach((key) => {
-            const td = document.createElement("td");
-            td.innerText = item[key] || "";
-            row.appendChild(td);
+          data.forEach((rowData, rowIndex) => {
+            const row = rowIndex === 0 ? thead.insertRow() : tbody.insertRow();
+            rowData.forEach((cellData, cellIndex) => {
+              const cell = row.insertCell();
+              let node;
+              if (rowIndex === 0) {
+                node = document.createTextNode(cellData);
+              } else {
+                node = document.createElement("input");
+                node.value = cellData;
+                node.addEventListener("input", () => {
+                  tableData[rowIndex][cellIndex] = node.value;
+                  updateRealTable(tableData);
+                });
+              }
+              cell.appendChild(node);
+            });
           });
 
-          tbody.appendChild(row);
-        });
-      }
+          return table;
+        }
 
-      createTable(data);
+        function updateRealTable(data) {
+          for (let rowIndex = 1; rowIndex < table.rows.length; rowIndex++) {
+            for (
+              let cellIndex = 0;
+              cellIndex < table.rows[rowIndex].cells.length;
+              cellIndex++
+            ) {
+              table.rows[rowIndex].cells[cellIndex].innerText =
+                data[rowIndex][cellIndex];
+            }
+          }
+        }
+
+        const virtualDOM = createVirtualDOM(tableData);
+        table.innerHTML = virtualDOM.innerHTML;
+      }
     </script>
-    <!-- <script src="“script.js”"></script> -->
   </body>
 </html>

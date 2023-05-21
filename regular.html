@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <!-- 2023.05.21 -->
+    <table>
+      <caption style="text-align: left">
+        Title:2023.05.21
+      </caption>
+      <col />
+      <col style="background-color: #97db9a" />
+      <col style="background-color: #dcc48e; border: 4px solid #c1437a" />
+      <col style="background-color: #97db9a" />
+      <col style="background-color: #dcc48e; border: 4px solid #c1437a" />
+      <!-- <col span="2" style="width: 42px" /> -->
+      <thead>
+        <tr>
+          <th rowspan="4"></th>
+          <th colspan="2">Mars</th>
+          <th colspan="2">Venus</th>
+        </tr>
+        <tr>
+          <th>Produced</th>
+          <th>Sold</th>
+          <th>Produced</th>
+          <th>Sold</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Teddy Bears</td>
+          <td contenteditable="true">50,000</td>
+          <td contenteditable="true">30,000</td>
+          <td contenteditable="true">100,000</td>
+          <td contenteditable="true">80,000</td>
+          <td contenteditable="true">9,000</td>
+        </tr>
+        <tr>
+          <td>Board Games</td>
+          <td contenteditable="true">10,000</td>
+          <td contenteditable="true">5,000</td>
+          <td contenteditable="true">12,000</td>
+          <td contenteditable="true">9,000</td>
+          <td contenteditable="true">9,000</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script>
+      let _cells = document.querySelectorAll('td[contenteditable="true"]');
+      console.log("cells:", _cells);
+      console.log("cells:", Array.from(_cells));
+      Array.from(_cells).forEach((cell) =>
+        cell.addEventListener("input", handleCellInputEvent)
+      );
+
+      function handleCellInputEvent(event) {
+        console.log("当前修改：", event);
+        console.log("当前修改：", event.target.textContent);
+      }
+    </script>
+
+    <script src="./src/components/input.js"></script>
+
+    <script src="./src/regular-expression.js"></script>
+
+    <script src="./event.js"></script>
+
+    <script>
+      console.warn("1 =35 ", intervals("=35", 35));
+      console.warn("2 [10,300] ", intervals("[10,300]", 135));
+      console.warn("3 [10", intervals("[10", 135));
+      console.warn("4 100]", intervals("100]", 35));
+      console.warn("5 [10,300)", intervals("[10,300)", 135));
+      console.warn("6 (10,300]", intervals("(10,300]", 135));
+      console.warn("7 (10", intervals("(10", 135));
+      console.warn("8 300)", intervals("300)", 135));
+
+      //   const inputComponent = new InputComponent();
+      //   //   const container = document.getElementById("container");
+      //   document.body.appendChild(inputComponent.render());
+
+      const inputComponent = new InputComponent();
+      document.body.appendChild(
+        inputComponent.render({
+          prop: "userName",
+          type: "text",
+          value: "请输入名字",
+          callback: handleInputEvent,
+        })
+      );
+      document.body.appendChild(
+        inputComponent.render({
+          prop: "pwd",
+          type: "password",
+          value: "",
+          callback: handleInputEvent,
+        })
+      );
+
+      function handleInputEvent(event) {
+        console.log("InputComponent input event:", event);
+        console.log(event.target.value);
+        return event;
+      }
+    </script>
+
+    <!-- 多级表头关联 以及表体关联 -->
+
+    <table>
+      <thead>
+        <tr>
+          <th>1<sup>3</sup> 等于：</th>
+          <th>2<sup>3</sup> 等于：</th>
+          <th>3<sup>3</sup> 等于：</th>
+          <th>4<sup>3</sup> 等于：</th>
+          <th>5<sup>3</sup> 等于：</th>
+          <th>6<sup>3</sup> 等于：</th>
+          <th>7<sup>3</sup> 等于：</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>row 1: 1</td>
+          <td>row 1: 8</td>
+          <td>row 1: 27</td>
+          <td>row 1: 64</td>
+          <td>row 1: 125</td>
+          <td>row 1: 216</td>
+          <td>row 1: 343</td>
+        </tr>
+        <tr>
+          <td>row 2: 1</td>
+          <td>row 2: 8</td>
+          <td>row 2: 27</td>
+          <td>row 2: 64</td>
+          <td>row 2: 125</td>
+          <td>row 2: 216</td>
+          <td>row 2: 343</td>
+        </tr>
+        <tr>
+          <td>row 3: 1</td>
+          <td>row 3: 8</td>
+          <td>row 3: 27</td>
+          <td>row 3: 64</td>
+          <td>row 3: 125</td>
+          <td>row 3: 216</td>
+          <td>row 3: 343</td>
+        </tr>
+        <tr>
+          <th>row 4: 1</th>
+          <td>row 4: 8</td>
+          <td>row 4: 27</td>
+          <td>row 4: 64</td>
+          <td>row 4: 125</td>
+          <td>row 4: 216</td>
+          <td>row 4: 343</td>
+        </tr>
+        <tr>
+          <th>row 5: 1</th>
+          <td>row 5: 8</td>
+          <td>row 5: 27</td>
+          <td>row 5: 64</td>
+          <td>row 5: 125</td>
+          <td>row 5: 216</td>
+          <td>row 5: 343</td>
+        </tr>
+        <tr>
+          <th>row 6: 1</th>
+          <td>row 6: 8</td>
+          <td>row 6: 27</td>
+          <td>row 6: 64</td>
+          <td>row 6: 125</td>
+          <td>row 6: 216</td>
+          <td>row 6: 343</td>
+        </tr>
+        <tr>
+          <th>row 7: 1</th>
+          <td>row 7: 8</td>
+          <td>row 7: 27</td>
+          <td>row 7: 64</td>
+          <td>row 7: 125</td>
+          <td>row 7: 216</td>
+          <td>row 7: 343</td>
+        </tr>
+        <tr>
+          <th>row 8: 1</th>
+          <td>row 8: 8</td>
+          <td>row 8: 27</td>
+          <td>row 8: 64</td>
+          <td>row 8: 125</td>
+          <td>row 8: 216</td>
+          <td>row 8: 343</td>
+        </tr>
+        <tr>
+          <th>row 9: 1</th>
+          <td>row 9: 8</td>
+          <td>row 9: 27</td>
+          <td>row 9: 64</td>
+          <td>row 9: 125</td>
+          <td>row 9: 216</td>
+          <td>row 9: 343</td>
+        </tr>
+        <tr>
+          <th>row 10: 1</th>
+          <td>row 10: 8</td>
+          <td>row 10: 27</td>
+          <td>row 10: 64</td>
+          <td>row 10: 125</td>
+          <td>row 10: 216</td>
+          <td>row 10: 343</td>
+        </tr>
+        <tr>
+          <th>row 11: 1</th>
+          <td>row 11: 8</td>
+          <td>row 11: 27</td>
+          <td>row 11: 64</td>
+          <td>row 11: 125</td>
+          <td>row 11: 216</td>
+          <td>row 11: 343</td>
+        </tr>
+        <tr>
+          <th>row 12: 1</th>
+          <td>row 12: 8</td>
+          <td>row 12: 27</td>
+          <td>row 12: 64</td>
+          <td>row 12: 125</td>
+          <td>row 12: 216</td>
+          <td>row 12: 343</td>
+        </tr>
+        <tr>
+          <th>row 13: 1</th>
+          <td>row 13: 8</td>
+          <td>row 13: 27</td>
+          <td>row 13: 64</td>
+          <td>row 13: 125</td>
+          <td>row 13: 216</td>
+          <td>row 13: 343</td>
+        </tr>
+        <tr>
+          <th>row 14: 1</th>
+          <td>row 14: 8</td>
+          <td>row 14: 27</td>
+          <td>row 14: 64</td>
+          <td>row 14: 125</td>
+          <td>row 14: 216</td>
+          <td>row 14: 343</td>
+        </tr>
+        <tr>
+          <th>row 15: 1</th>
+          <td>row 15: 8</td>
+          <td>row 15: 27</td>
+          <td>row 15: 64</td>
+          <td>row 15: 125</td>
+          <td>row 15: 216</td>
+          <td>row 15: 343</td>
+        </tr>
+        <tr>
+          <th>row 16: 1</th>
+          <td>row 16: 8</td>
+          <td>row 16: 27</td>
+          <td>row 16: 64</td>
+          <td>row 16: 125</td>
+          <td>row 16: 216</td>
+          <td>row 16: 343</td>
+        </tr>
+        <tr>
+          <th>row 17: 1</th>
+          <td>row 17: 8</td>
+          <td>row 17: 27</td>
+          <td>row 17: 64</td>
+          <td>row 17: 125</td>
+          <td>row 17: 216</td>
+          <td>row 17: 343</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table id="myTable" tabindex="0">
+      <thead>
+        <tr>
+          <th>Column 1</th>
+          <th>Column 2</th>
+          <th>Column 3</th>
+        </tr>
+      </thead>
+
+      <script>
+        // const tbodyConfig = [
+        //   {
+        //     prop: "cname",
+        //     text: "",
+        //     components: [
+        //       {
+        //         tagName: "select",
+        //         text: "",
+        //         value: "",
+        //         options: [
+        //           { prop: "a", text: "A" },
+        //           { prop: "c", text: "C" },
+        //           { prop: "e", text: "E" },
+        //         ],
+        //         callback: handleSelectChange,
+        //       },
+        //     ],
+        //   },
+        //   { prop: "name", text: "monk", contenteditable: true },
+        //   { prop: "eame", text: "Amonk", contenteditable: true },
+        // ];
+      </script>
+      <tbody>
+        <tr>
+          <td contenteditable="true" data-prop="key">Row 1 Cell 1</td>
+          <td>
+            <select>
+              <option value="Option 1">Option 1</option>
+              <option value="Option 2">Option 2</option>
+              <option value="Option 3">Option 3</option>
+            </select>
+          </td>
+          <td>
+            <input type="checkbox" />
+          </td>
+        </tr>
+        <tr>
+          <td contenteditable="true">Row 2 Cell 1</td>
+          <td>
+            <input type="radio" name="row2" />
+            <input type="radio" name="row2" />
+            <input type="radio" name="row2" />
+          </td>
+          <td>
+            <select>
+              <option value="Option 1">Option 1</option>
+              <option value="Option 2">Option 2</option>
+              <option value="Option 3">Option 3</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table id="myTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <!-- contenteditable="true" 可以用在很多元素上
+                如果没给出该属性或设置了无效的属性值，则其默认值继承自父元素：
+                即，如果父元素可编辑，该子元素也可编辑。 -->
+          <td contenteditable="true">John</td>
+          <td contenteditable="true">30</td>
+          <td contenteditable="true">Male</td>
+        </tr>
+        <tr>
+          <td contenteditable="true">Jane</td>
+          <td contenteditable="true">25</td>
+          <td contenteditable="true">Female</td>
+        </tr>
+      </tbody>
+    </table>
+    <script>
+      //   const table = document.getElementById("myTable");
+      //   const cells = table.getElementsByTagName("td");
+
+      //   for (let i = 0; i < cells.length; i++) {
+      //     cells[i].addEventListener("input", () => {
+      //       console.log(cells[i].textContent);
+      //     });
+      //   }
+
+      //   document.addEventListener("myEvent", (event) => {
+      //     console.log(event.detail.value); // Output: "Hello world!"
+      //   });
+    </script>
+
+  </body>
+</html>
