@@ -73,9 +73,9 @@ async function getPeposIssueInfo() {
 // getissue();
 
 // 动态import 并使用
-import("./sum.js").then((Module) => {
-  console.log("sum:", Module.sum(10, 5));
-});
+// import("./sum.js").then((Module) => {
+//   console.log("sum:", Module.sum(10, 5));
+// });
 
 // 测试 import html 会有MIME问题。
 // import("../html/nav.html").then((html) => {

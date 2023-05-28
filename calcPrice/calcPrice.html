@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calc Price</title>
+  </head>
+  <body id="root">
+    <section>
+      <label for="people">人头: </label>
+      <input id="people" name="people" type="text" value="35" />
+      <label for="cart">是否领取购物车: </label
+      ><select name="cart" id="cart">
+        <option value="">请选择</option>
+        <option value="YES">YES</option>
+        <option value="NO">NO</option>
+      </select>
+      <label for="delivery">是否配送: </label
+      ><select name="delivery" id="delivery">
+        <option value="">请选择</option>
+        <option value="YES">YES</option>
+        <option value="NO">NO</option>
+      </select>
+      <button onclick="handleChangeData(this,event)">Change Data</button>
+    </section>
+    <section id="tablePrice"></section>
+    <script src="../src/components/button.js"></script>
+    <script src="../src/components/select.js"></script>
+    <script src="../src/components/Table.js"></script>
+    <script src="../src/regular-expression.js"></script>
+    <script src="./index.js"></script>
+    <script>
+      // 单价表
+      const PRICE_DATA = {
+        // 第一团
+        "001": {
+          // 团报基本价:{1-4个人:1000,5个人:1100,6个以上，每人加:300}
+          people: { "[1,4]": 1000, "=5": 1100, "[6": 300 },
+          // 购物袋 {1-10个:100,11-30个:300,60个以上:不再收钱}
+          toteBag: { "[1,10]": 100, "[11,30]": 300, "[31,59]": 500, "[60": 0 },
+          // 购物车 {1-4辆:500,5辆:600,六辆以上:10000}
+          cart: { "[1,4]": 3500, "=5": 5600, "[6": 10000 },
+          delivery: 1000,
+          hat: 100,
+          coat: 300,
+          jacket: 500,
+          pants: 700,
+          shoes: 1000,
+          shirt: 30,
+          dress: 50,
+          suitCoat: 1300,
+          suitPants: 3100,
+        },
+        // 第三团
+        "003": {
+          // 团报基本价:{1-4个人:1000,5个人:1100,6个以上，每人加:300}
+          people: { "[1,4]": 11000, "=5": 11100, "[6": 1300 },
+          // 购物袋 {1-10个:100,11-30个:300,60个以上:不再收钱}
+          toteBag: {
+            "[1,10]": 1100,
+            "[11,30]": 1300,
+            "[31,59]": 1500,
+            "[60": 0,
+          },
+          // 购物车 {1-4辆:500,5辆:600,六辆以上:10000}
+          cart: { "[1,4]": 5500, "=5": 7600, "[6": 110000 },
+          delivery: 1800,
+          hat: 1100,
+          coat: 1300,
+          jacket: 1500,
+          pants: 1700,
+          shoes: 11000,
+          shirt: 130,
+          dress: 150,
+          suitCoat: 11300,
+          suitPants: 13100,
+        },
+      };
+      const SHOPING_CLUB = {
+        people: document.querySelector('input[name="people"]').value,
+        cart: document.querySelector('select[name="cart"]').value,
+        delivery: document.querySelector('select[name="delivery"]').value,
+      };
+
+      const SHOPING_CLUB_DATA = {
+        people: SHOPING_CLUB.people,
+        toteBag: SHOPING_CLUB.people,
+        cart: SHOPING_CLUB.cart == "YES" ? SHOPING_CLUB.people : 0,
+        delivery: SHOPING_CLUB.delivery == "YES" ? 1 : 0,
+      };
+
+      const calcPrice = new CalcPrice({
+        root: document.querySelector("#root"),
+        PRICE_DATA,
+        // 当前页面所需定量值，人员定量。用于取数字区间的基准
+        CONFIG_BASE_PEOPLE: 5,
+        // CONFIG_BASE_TOTEBAG: 60,
+      });
+
+      calcPrice.render(SHOPING_CLUB_DATA, []);
+
+      function handleChangeData(el, event) {
+        console.log("handleChangeData:", el);
+        console.log("handleChangeData:", event);
+
+        calcPrice.render(
+          {
+            people: parseInt(SHOPING_CLUB.people) * 5,
+            toteBag: parseInt(SHOPING_CLUB.people) * 5,
+            cart:
+              SHOPING_CLUB.cart == "YES"
+                ? parseInt(SHOPING_CLUB.people) * 5
+                : 0,
+            delivery: SHOPING_CLUB.delivery == "YES" ? 1 : 0,
+          },
+          []
+        );
+      }
+    </script>
+  </body>
+</html>

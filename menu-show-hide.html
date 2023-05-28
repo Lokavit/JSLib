@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .accordion__header {
+        background-color: #444;
+        color: white;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        text-align: left;
+        border: none;
+        outline: none;
+        transition: background-color 0.3s;
+      }
+      .accordion__header:hover {
+        background-color: #666;
+      }
+      .accordion__content {
+        padding: 0 18px;
+        background-color: white;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+      }
+
+      .sidebar {
+        width: 250px;
+        height: 100%;
+        background-color: #f5f5f5;
+        overflow: auto;
+      }
+      .nav-item > ul {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="sidebar" id="sidebar"></nav>
+    <script>
+      const navigationData = [
+        {
+          title: "NOVEL",
+          url: "#",
+          children: [
+            {
+              title: "QIAN LONG",
+              url: "#",
+              children: [
+                {
+                  title: "001",
+                  url: "#",
+                },
+                {
+                  title: "002",
+                  url: "#",
+                },
+              ],
+            },
+            {
+              title: "YU LONG",
+              url: "#",
+            },
+          ],
+        },
+        {
+          title: "DOCS",
+          url: "#",
+          children: [
+            {
+              title: "front-end",
+              url: "#",
+
+              children: [
+                {
+                  title: "HTML",
+                  url: "#",
+                },
+                {
+                  title: "JS",
+                  url: "#",
+                },
+                {
+                  title: "CSS",
+                  url: "#",
+                },
+              ],
+            },
+          ],
+        },
+      ];
+      class Sidebar {
+        constructor(data, containerId) {
+          this.data = data;
+          this.container = document.getElementById(containerId);
+          this.buildNavigation(this.data, this.container);
+        }
+
+        buildNavigation(data, parentElement) {
+          const ul = document.createElement("ul");
+
+          data.forEach((item) => {
+            const li = document.createElement("li");
+            li.classList.add("nav-item");
+
+            const a = document.createElement("a");
+            a.href = item.url || "#";
+            a.textContent = item.title;
+
+            li.addEventListener("click", (event) => {
+              event.stopPropagation();
+
+              if (item.children && item.children.length) {
+                // Remove active class from other items
+                parentElement
+                  .querySelectorAll(".nav-item.active")
+                  .forEach((elem) => {
+                    if (elem !== li) {
+                      elem.classList.remove("active");
+                      const subNav = elem.querySelector("ul");
+
+                      if (subNav) {
+                        subNav.style.display = "none";
+                      }
+                    }
+                  });
+
+                // Toggle active class for the clicked item
+                li.classList.toggle("active");
+                const subNav = li.querySelector("ul");
+
+                if (subNav) {
+                  subNav.style.display = li.classList.contains("active")
+                    ? "block"
+                    : "none";
+                }
+              } else if (typeof this.onNavigationItemClick === "function") {
+                this.onNavigationItemClick(event, item);
+              }
+            });
+
+            li.appendChild(a);
+
+            if (item.children && item.children.length) {
+              this.buildNavigation(item.children, li);
+            }
+
+            ul.appendChild(li);
+          });
+
+          parentElement.appendChild(ul);
+        }
+      }
+
+      const sidebar = new Sidebar(navigationData, "sidebar");
+    </script>
+
+
+  </body>
+</html>

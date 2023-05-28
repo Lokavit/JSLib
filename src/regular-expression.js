@@ -5,7 +5,7 @@
   Author: Lokavit
   Birthtime: 2023/5/20 14:23:11
   -----
-  Mtime: 2023/5/20 20:35:18
+  Mtime: 2023/5/28 19:07:30
   WordCount: 63
   -----
   Copyright © 1911 - 2023 Lokavit
@@ -20,7 +20,7 @@
  * @param {*} val 需要匹配到数字区间的值
  * @returns
  */
-const intervals = (str, val) => {
+const Intervals = (str, val) => {
   //   console.log("匹配 =number:", str.match(/^=(\d+)$/));
   //   console.log("匹配 [number,number]:", str.match(/^\[(\d+),(\d+)\]$/));
   //   console.log("匹配 [number:", str.match(/^\[(\d+)$/));

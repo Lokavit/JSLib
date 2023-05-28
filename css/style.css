@@ -43,7 +43,6 @@ footer {
   background-color: #333;
 }
 
-table,
 th,
 td {
   border: 1px solid;
@@ -52,7 +51,7 @@ td {
 table {
   width: 100%;
   /* max-width: 50vw; */
-  height: 240px;
+  /* height: 240px; */
   margin: 0 auto;
   display: block;
   overflow-x: auto;
@@ -66,8 +65,8 @@ tbody {
 th,
 td {
   padding: 5px 10px;
-  border-top-width: 0;
-  border-left-width: 0;
+  /* border-top-width: 0; */
+  /* border-left-width: 0; */
 }
 
 th {
@@ -90,9 +89,9 @@ tbody tr td:first-child {
 
 th:last-child,
 td:last-child {
-  border-right-width: 0;
+  /* border-right-width: 0; */
 }
 
 tr:last-child td {
-  border-bottom-width: 0;
+  /* border-bottom-width: 0; */
 }
