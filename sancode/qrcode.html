@@ -32,6 +32,29 @@
 
     <script>
       let html5QrcodeScanner;
+
+      let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
+        // Square QR Box, with size = 80% of the min edge.
+        let minEdgeSizeThreshold = 250;
+        let edgeSizePercentage = 0.75;
+        let minEdgeSize =
+          viewfinderWidth > viewfinderHeight
+            ? viewfinderHeight
+            : viewfinderWidth;
+        let qrboxEdgeSize = Math.floor(minEdgeSize * edgeSizePercentage);
+        if (qrboxEdgeSize < minEdgeSizeThreshold) {
+          if (minEdgeSize < minEdgeSizeThreshold) {
+            return { width: minEdgeSize, height: minEdgeSize };
+          } else {
+            return {
+              width: minEdgeSizeThreshold,
+              height: minEdgeSizeThreshold,
+            };
+          }
+        }
+        return { width: qrboxEdgeSize, height: qrboxEdgeSize };
+      };
+
       window.addEventListener("load", (event) => {
         document
           .querySelector(`button[data-id="sancode"]`)
@@ -45,7 +68,11 @@
 
         html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
           fps: 10,
-          qrbox: 250,
+          // qrbox: 250,
+          qrbox: qrboxFunction,
+          experimentalFeatures: {
+            useBarCodeDetectorIfSupported: true,
+          },
           useBarCodeDetectorIfSupported: true,
           rememberLastUsedCamera: true,
           aspectRatio: 4 / 3,
