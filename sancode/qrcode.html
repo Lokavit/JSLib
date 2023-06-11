@@ -31,20 +31,20 @@
     </div>
 
     <script>
-      let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
-        let minEdgePercentage = 0.7; // 70%
-        let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
-        let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
-        return {
-          width: qrboxSize,
-          height: qrboxSize,
-        };
-      };
+      // let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
+      //   let minEdgePercentage = 0.7; // 70%
+      //   let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+      //   let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
+      //   return {
+      //     width: qrboxSize,
+      //     height: qrboxSize,
+      //   };
+      // };
 
       let html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
         fps: 10,
-        // qrbox: { width: 400, height: 100 },
-        qrbox: qrboxFunction,
+        qrbox: { width: 400, height: 100 },
+        // qrbox: qrboxFunction,
         experimentalFeatures: {
           useBarCodeDetectorIfSupported: true,
         },
@@ -80,12 +80,10 @@
           console.log(`Scan result ${decodedText}`, decodedResult);
           document.body.innerText += `格式:${decodedResult.result.format.formatName}`;
           document.body.innerText += `码:${decodedText}`;
-          document.body.innerText += html5QrcodeScanner;
+          // document.body.innerText += html5QrcodeScanner;
 
           // html5QrcodeScanner.pause();
-          html5QrcodeScanner.clear().then((res) => {
-            document.body.innerText += `${res}`;
-          });
+          html5QrcodeScanner.clear();
         }
       }
 
