@@ -26,34 +26,35 @@
     <button type="button" data-id="sancode">一个条码icon</button>
 
     <div class="qrcode_container">
-      <div id="qr-reader"></div>
+      <div id="qr-reader" style="width: 600px"></div>
       <div id="scanned-result"></div>
     </div>
 
     <script>
-      let html5QrcodeScanner;
-
       let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
-        // Square QR Box, with size = 80% of the min edge.
-        let minEdgeSizeThreshold = 250;
-        let edgeSizePercentage = 0.75;
-        let minEdgeSize =
-          viewfinderWidth > viewfinderHeight
-            ? viewfinderHeight
-            : viewfinderWidth;
-        let qrboxEdgeSize = Math.floor(minEdgeSize * edgeSizePercentage);
-        if (qrboxEdgeSize < minEdgeSizeThreshold) {
-          if (minEdgeSize < minEdgeSizeThreshold) {
-            return { width: minEdgeSize, height: minEdgeSize };
-          } else {
-            return {
-              width: minEdgeSizeThreshold,
-              height: minEdgeSizeThreshold,
-            };
-          }
-        }
-        return { width: qrboxEdgeSize, height: qrboxEdgeSize };
+        let minEdgePercentage = 0.7; // 70%
+        let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+        let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
+        return {
+          width: qrboxSize,
+          height: qrboxSize,
+        };
       };
+
+      let html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
+        fps: 10,
+        // qrbox: { width: 400, height: 100 },
+        qrbox: qrboxFunction,
+        experimentalFeatures: {
+          useBarCodeDetectorIfSupported: true,
+        },
+        useBarCodeDetectorIfSupported: true,
+        rememberLastUsedCamera: true,
+        aspectRatio: 4 / 3,
+        showTorchButtonIfSupported: true,
+        showZoomSliderIfSupported: true,
+        defaultZoomValueIfSupported: 2,
+      });
 
       window.addEventListener("load", (event) => {
         document
@@ -66,24 +67,7 @@
         // 显示整个组件
         document.querySelector(".qrcode_container").style.display = "block";
 
-        html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
-          fps: 10,
-          // qrbox: 250,
-          qrbox: qrboxFunction,
-          experimentalFeatures: {
-            useBarCodeDetectorIfSupported: true,
-          },
-          useBarCodeDetectorIfSupported: true,
-          rememberLastUsedCamera: true,
-          aspectRatio: 4 / 3,
-          showTorchButtonIfSupported: true,
-          showZoomSliderIfSupported: true,
-          defaultZoomValueIfSupported: 2,
-        }).render(onScanSuccess, onScanFailure);
-
-        // 判断是否有权限，没有则需要获取相机权限
-        // 而后，直接出来摄像头扫码.
-        // 读到信息后，display:none reader元素
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
       }
 
       function onScanSuccess(decodedText, decodedResult) {
@@ -98,7 +82,10 @@
           document.body.innerText += `码:${decodedText}`;
           document.body.innerText += html5QrcodeScanner;
 
-          html5QrcodeScanner.pause();
+          // html5QrcodeScanner.pause();
+          html5QrcodeScanner.clear().then((res) => {
+            document.body.innerText += `${res}`;
+          });
         }
       }
 
