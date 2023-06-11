@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- 
+  https://github.com/mebjas/html5-qrcode
+ -->
+    <script src="./html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <style>
+      .qrcode_container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 99;
+        background-color: rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <button type="button" data-id="sancode">一个条码icon</button>
+
+    <div class="qrcode_container">
+      <div id="qr-reader"></div>
+      <div id="scanned-result"></div>
+    </div>
+
+    <script>
+      let html5QrcodeScanner;
+      window.addEventListener("load", (event) => {
+        document
+          .querySelector(`button[data-id="sancode"]`)
+          .addEventListener("click", handleSanCode, false);
+      });
+
+      function handleSanCode(event) {
+        console.log("点击扫码:", event);
+        // 显示整个组件
+        document.querySelector(".qrcode_container").style.display = "block";
+
+        html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
+          fps: 10,
+          qrbox: 250,
+        }).render(onScanSuccess, onScanFailure);
+
+        // 判断是否有权限，没有则需要获取相机权限
+        // 而后，直接出来摄像头扫码.
+        // 读到信息后，display:none reader元素
+      }
+
+      function onScanSuccess(decodedText, decodedResult) {
+        let lastResult,
+          countResults = 0;
+        if (decodedText !== lastResult) {
+          ++countResults;
+          lastResult = decodedText;
+          // Handle on success condition with the decoded message.
+          console.log(`Scan result ${decodedText}`, decodedResult);
+          document.body.innerText += `格式:${decodedResult.result.format.formatName}`;
+          document.body.innerText += `码:${decodedText}`;
+          document.body.innerText += html5QrcodeScanner;
+
+          html5QrcodeScanner.pause();
+        }
+      }
+
+      function onScanFailure(error) {
+        // handle scan failure, usually better to ignore and keep scanning.
+        // for example:
+        console.warn(`Code scan error = ${error}`);
+      }
+    </script>
+  </body>
+</html>
