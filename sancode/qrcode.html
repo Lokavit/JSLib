@@ -46,6 +46,12 @@
         html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
           fps: 10,
           qrbox: 250,
+          useBarCodeDetectorIfSupported: true,
+          rememberLastUsedCamera: true,
+          aspectRatio: 4 / 3,
+          showTorchButtonIfSupported: true,
+          showZoomSliderIfSupported: true,
+          defaultZoomValueIfSupported: 2,
         }).render(onScanSuccess, onScanFailure);
 
         // 判断是否有权限，没有则需要获取相机权限
